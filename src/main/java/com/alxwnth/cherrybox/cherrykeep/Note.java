@@ -18,6 +18,7 @@ class Note {
 
     public Note(String text, Date expiresAt) {
         this.text = text;
+        this.createdAt = new Date();
         this.expiresAt = expiresAt;
     }
 
