@@ -2,24 +2,27 @@ package com.alxwnth.cherrybox.cherrykeep;
 
 import jakarta.persistence.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
-class Note {
+public class Note {
     private @Id
     @GeneratedValue Long id;
     private String text;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private ZonedDateTime createdAt;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date expiresAt;
+    private ZonedDateTime expiresAt;
 
     public Note() {}
 
-    public Note(String text, Date expiresAt) {
+    public Note(String text) {
         this.text = text;
-        this.createdAt = new Date();
-        this.expiresAt = expiresAt;
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC+0"));
+        this.createdAt = now;
+        this.expiresAt = now.plusDays(1);
     }
 
     public String getText() {
@@ -30,15 +33,15 @@ class Note {
         this.text = text;
     }
 
-    public Date getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return this.createdAt;
     }
 
-    public Date getExpiresAt() {
+    public ZonedDateTime getExpiresAt() {
         return expiresAt;
     }
 
-    public void setExpiresAt(Date expiresAt) {
-        this.expiresAt = expiresAt;
+    public Long getId() {
+        return id;
     }
 }

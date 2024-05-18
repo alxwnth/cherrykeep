@@ -1,21 +1,33 @@
 package com.alxwnth.cherrybox.cherrykeep;
 
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 public class NoteController {
     private final NoteRepository noteRepository;
+    private final NoteModelAssembler assembler;
 
-    NoteController(NoteRepository noteRepository) {
+    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler) {
         this.noteRepository = noteRepository;
+        this.assembler = assembler;
     }
 
     @GetMapping("/notes")
-    List<Note> all() {
-        return noteRepository.findAll();
+    CollectionModel<EntityModel<Note>> all() {
+        List<EntityModel<Note>> notes =
+                noteRepository.findAll().stream()
+                        .map(assembler::toModel)
+                        .collect(Collectors.toList());
+
+        return CollectionModel.of(notes, linkTo(methodOn(NoteController.class).all()).withSelfRel());
     }
 
     @PostMapping("/notes")
@@ -24,8 +36,9 @@ public class NoteController {
     }
 
     @GetMapping("/notes/{id}")
-    Note getNote(@PathVariable long id) {
-        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+    EntityModel<Note> one(@PathVariable long id) {
+        Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+        return assembler.toModel(note);
     }
 
     @DeleteMapping("/notes/{id}")
