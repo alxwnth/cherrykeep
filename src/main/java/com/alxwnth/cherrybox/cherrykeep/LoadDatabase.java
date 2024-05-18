@@ -15,7 +15,7 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(NoteRepository repository) {
         return args -> {
-            log.info("Preloading {}", repository.save(new Note("test", new Date(Long.MAX_VALUE))));
+            log.info("Preloading {}", repository.save(new Note("test")));
         };
     }
 }
