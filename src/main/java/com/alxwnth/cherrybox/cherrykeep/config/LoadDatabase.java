@@ -1,12 +1,12 @@
-package com.alxwnth.cherrybox.cherrykeep;
+package com.alxwnth.cherrybox.cherrykeep.config;
 
+import com.alxwnth.cherrybox.cherrykeep.entity.Note;
+import com.alxwnth.cherrybox.cherrykeep.repository.NoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Date;
 
 @Configuration
 public class LoadDatabase {

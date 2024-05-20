@@ -1,10 +1,9 @@
-package com.alxwnth.cherrybox.cherrykeep;
+package com.alxwnth.cherrybox.cherrykeep.entity;
 
 import jakarta.persistence.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Entity
 public class Note {

@@ -1,4 +1,4 @@
-package com.alxwnth.cherrybox.cherrykeep;
+package com.alxwnth.cherrybox.cherrykeep.advice;
 
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
 import org.springframework.http.HttpStatus;

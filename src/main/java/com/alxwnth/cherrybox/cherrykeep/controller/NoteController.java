@@ -1,6 +1,9 @@
-package com.alxwnth.cherrybox.cherrykeep;
+package com.alxwnth.cherrybox.cherrykeep.controller;
 
+import com.alxwnth.cherrybox.cherrykeep.assembler.NoteModelAssembler;
+import com.alxwnth.cherrybox.cherrykeep.repository.NoteRepository;
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
+import com.alxwnth.cherrybox.cherrykeep.entity.Note;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +24,7 @@ public class NoteController {
     }
 
     @GetMapping("/notes")
-    CollectionModel<EntityModel<Note>> all() {
+    public CollectionModel<EntityModel<Note>> all() {
         List<EntityModel<Note>> notes =
                 noteRepository.findAll().stream()
                         .map(assembler::toModel)
@@ -36,7 +39,7 @@ public class NoteController {
     }
 
     @GetMapping("/notes/{id}")
-    EntityModel<Note> one(@PathVariable long id) {
+    public EntityModel<Note> one(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
         return assembler.toModel(note);
     }
