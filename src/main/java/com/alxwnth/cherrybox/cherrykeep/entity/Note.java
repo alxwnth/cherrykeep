@@ -14,11 +14,20 @@ public class Note {
     private ZonedDateTime createdAt;
     @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime expiresAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Note() {}
+    public User getUser() {
+        return user;
+    }
 
-    public Note(String text) {
+    public Note() {
+    }
+
+    public Note(String text, User user) {
         this.text = text;
+        this.user = user;
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC+0"));
         this.createdAt = now;
         this.expiresAt = now.plusDays(1);

@@ -1,12 +1,13 @@
 package com.alxwnth.cherrybox.cherrykeep.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -18,6 +19,9 @@ public class User implements UserDetails {
     private String password;
     @Transient
     private String confirmPassword;
+
+    @OneToMany(mappedBy = "user")
+    private List<Note> notes;
 
     public Long getId() {
         return id;
@@ -55,6 +59,10 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
     }
 
     @Override
