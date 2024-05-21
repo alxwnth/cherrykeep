@@ -1,0 +1,11 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    prefix: file:src/main/resources/templates/
+    cache: false
+
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
