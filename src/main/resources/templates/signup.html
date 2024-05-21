@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html th:replace="~{layouts/root :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<section>
+    <form action="#" th:action="@{/signup}" th:object="${userForm}" method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" th:field="*{username}"/>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" th:field="*{password}"/>
+        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</p>
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}"/>
+        <input type="submit" value="Submit"/>
+    </form>
+</section>
+</html>
