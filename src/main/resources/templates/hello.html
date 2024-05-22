@@ -7,7 +7,13 @@
 <body>
 <section>
     <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
-    <span th:text="${#authentication.getPrincipal().getId()}"></span>
+
+    <form action="#" th:action="@{/notes}" method="post">
+        <label for="noteText">Note text</label>
+        <textarea th:name="noteText" id="noteText" required minlength="1" maxlength="500"></textarea>
+        <input type="submit" value="Create"/>
+    </form>
+
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="Sign Out"/>
     </form>
