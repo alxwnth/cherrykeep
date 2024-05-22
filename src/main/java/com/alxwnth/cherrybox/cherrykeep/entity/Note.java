@@ -6,21 +6,30 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "notes")
 public class Note {
-    private @Id
-    @GeneratedValue Long id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "text", nullable = false, length = 500)
     private String text;
+
+    @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime createdAt;
+
+    @Column(name = "expires_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime expiresAt;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    public User getUser() {
-        return user;
-    }
+    @Column(name = "pinned", nullable = false)
+    private boolean pinned;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Note() {
     }
@@ -31,6 +40,7 @@ public class Note {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC+0"));
         this.createdAt = now;
         this.expiresAt = now.plusDays(1);
+        this.pinned = false;
     }
 
     public String getText() {
@@ -51,5 +61,25 @@ public class Note {
 
     public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void pin() {
+        this.pinned = true;
+    }
+
+    public void unpin() {
+        this.pinned = false;
     }
 }
