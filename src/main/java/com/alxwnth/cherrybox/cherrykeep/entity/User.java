@@ -1,7 +1,6 @@
 package com.alxwnth.cherrybox.cherrykeep.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,23 +11,25 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "username", nullable = false, length = 50)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
     @Transient
     private String confirmPassword;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override
@@ -49,16 +50,8 @@ public class User implements UserDetails {
         return confirmPassword;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public List<Note> getNotes() {
