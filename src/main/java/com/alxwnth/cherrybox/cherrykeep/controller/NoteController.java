@@ -12,9 +12,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class NoteController {
     private final NoteRepository noteRepository;
     private final NoteModelAssembler assembler;
@@ -27,11 +29,13 @@ public class NoteController {
     }
 
     /**
-     * Find a {@link User}'s {@link Note}s based upon user id. Turn it into context-based link.
+     * Find a {@link User}'s {@link Note}s based upon user id. Return a view populated with a {@link User}'s {@link Note}s.
      */
     @GetMapping("/users/{id}/notes")
-    public CollectionModel<EntityModel<Note>> all(@PathVariable Long id) {
-        return assembler.toCollectionModel(noteRepository.findByUserId(id));
+    public String all(@PathVariable Long id, Model model) {
+        CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(noteRepository.findByUserId(id));
+        model.addAttribute("userNotes", noteCollection);
+        return "notes";
     }
 
     @PostMapping("/notes")

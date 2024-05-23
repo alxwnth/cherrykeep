@@ -14,8 +14,9 @@ public class NoteModelAssembler implements RepresentationModelAssembler<Note, En
     @Override
     public EntityModel<Note> toModel(Note note) {
         EntityModel<Note> noteModel = EntityModel.of(note,
-                linkTo(methodOn(NoteController.class).one(note.getId())).withSelfRel(),
-                linkTo(methodOn(NoteController.class).all(note.getUser().getId())).withRel("notes"));
+                // TODO: Maybe it's not the best way to do this, look deeper later
+                linkTo(NoteController.class).slash("notes").slash(note.getId()).withSelfRel(),
+                linkTo(NoteController.class).slash("users").slash(note.getUser().getId()).slash("notes").withRel("notes"));
 
         if (note.isPinned()) {
             noteModel.add(linkTo(methodOn(NoteController.class).unpin(note.getId())).withRel("unpin"));
