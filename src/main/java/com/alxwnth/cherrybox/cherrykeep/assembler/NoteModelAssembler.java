@@ -13,10 +13,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class NoteModelAssembler implements RepresentationModelAssembler<Note, EntityModel<Note>> {
     @Override
     public EntityModel<Note> toModel(Note note) {
-        return EntityModel.of(note,
+        EntityModel<Note> noteModel = EntityModel.of(note,
                 linkTo(methodOn(NoteController.class).one(note.getId())).withSelfRel(),
-                linkTo(methodOn(NoteController.class).all(note.getUser().getId())).withRel("notes"),
-                linkTo(methodOn(NoteController.class).pin(note.getId())).withRel("pin"),
-                linkTo(methodOn(NoteController.class).unpin(note.getId())).withRel("unpin"));
+                linkTo(methodOn(NoteController.class).all(note.getUser().getId())).withRel("notes"));
+
+        if (note.isPinned()) {
+            noteModel.add(linkTo(methodOn(NoteController.class).unpin(note.getId())).withRel("unpin"));
+        } else {
+            noteModel.add(linkTo(methodOn(NoteController.class).pin(note.getId())).withRel("pin"));
+        }
+
+        return noteModel;
     }
 }
