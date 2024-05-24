@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title th:replace="${title}">Layout title</title>
-    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
-    <script type="text/javascript" th:src="@{/js/htmx.min.js}"></script>
+    <link th:href="@{/css/bundle.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bundle.js}" defer></script>
 </head>
 <body>
 <div class="container" th:replace="${content}"></div>
