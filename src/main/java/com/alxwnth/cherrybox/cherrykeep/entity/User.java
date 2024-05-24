@@ -28,13 +28,24 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes;
 
+    public User() {
+    }
+
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new HashSet<>();
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -50,13 +61,23 @@ public class User implements UserDetails {
         return confirmPassword;
     }
 
-    public String getUsername() {
-        return username;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public List<Note> getNotes() {
         return notes;
     }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new HashSet<>();
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {
