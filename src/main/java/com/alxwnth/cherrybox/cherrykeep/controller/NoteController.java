@@ -29,26 +29,21 @@ public class NoteController {
     }
 
     /**
-     * Find a {@link User}'s {@link Note}s based upon user id. Return a view populated with a {@link User}'s {@link Note}s.
+     * Find the current {@link User}'s {@link Note}s based upon user id. Return a view populated with a {@link User}'s {@link Note}s.
      */
-    @GetMapping("/users/{id}/notes")
-    public String all(@PathVariable Long id, Model model) {
-        CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(noteRepository.findByUserId(id));
+    @GetMapping("/notes")
+    public String all(Model model) {
+        CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
+                noteRepository.findByUserId(getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }
 
     @PostMapping("/notes")
-    Note newNote(@RequestParam String noteText) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User authenticatedUser = (User) authentication.getPrincipal();
-        Long authenticatedUserId = authenticatedUser.getId();
-        User userInDatabase = userRepository.findById(authenticatedUserId)
-                .orElseThrow(() -> new UserNotFoundException(authenticatedUserId));
-
-        Note note = new Note(noteText, userInDatabase);
-
-        return noteRepository.save(note);
+    String newNote(@RequestParam String noteText) {
+        Note note = new Note(noteText, getCurrentlyAuthenticatedUser());
+        noteRepository.save(note);
+        return "redirect:/notes";
     }
 
     @GetMapping("/notes/{id}")
@@ -74,6 +69,15 @@ public class NoteController {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
         note.unpin();
         return ResponseEntity.ok(assembler.toModel(noteRepository.save(note)));
+    }
+
+    // TODO: Consider moving it into a different class
+    private User getCurrentlyAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) authentication.getPrincipal();
+        Long authenticatedUserId = authenticatedUser.getId();
+        return userRepository.findById(authenticatedUserId)
+                .orElseThrow(() -> new UserNotFoundException(authenticatedUserId));
     }
 }
 

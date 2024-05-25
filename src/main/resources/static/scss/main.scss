@@ -1,7 +1,7 @@
-@use "./components/card";
+@use 'abstracts/mq-settings';
 
-.l-notes {
-  display: flex;
-  gap: 10px;
-}
+@use "variables/fonts";
 
+@use "layout/notes";
+
+@use "components/note";
