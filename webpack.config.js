@@ -35,7 +35,7 @@ module.exports = (env, argv) => ({
             },
             {
                 test: /\.scss$/,
-                include: path.resolve(__dirname, './src/main/resources/scss'),
+                // include: path.resolve(__dirname, 'src/main/resources/static/scss'),
                 use: [
                     argv.mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
                     {
@@ -53,13 +53,19 @@ module.exports = (env, argv) => ({
             }
         ]
     },
+    resolve: {
+        modules: [
+            path.resolve(__dirname, './src/main/resources'),
+            'node_modules'
+        ],
+    },
     devServer: {
         port: 8081,
         compress: true,
         watchFiles: [
             'src/main/resources/templates/**/*.html',
-            'src/main/resources/js/**/*.js',
-            'src/main/resources/scss/**/*.scss'
+            'src/main/resources/static/js/**/*.js',
+            'src/main/resources/static/scss/**/*.scss'
         ],
         proxy: [{
             context: ['/'],
