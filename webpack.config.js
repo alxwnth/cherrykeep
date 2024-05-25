@@ -35,7 +35,6 @@ module.exports = (env, argv) => ({
             },
             {
                 test: /\.scss$/,
-                // include: path.resolve(__dirname, 'src/main/resources/static/scss'),
                 use: [
                     argv.mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
                     {
@@ -50,7 +49,11 @@ module.exports = (env, argv) => ({
                         options: {sourceMap: true}
                     }
                 ]
-            }
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+            },
         ]
     },
     resolve: {

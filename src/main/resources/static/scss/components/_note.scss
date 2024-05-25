@@ -1,0 +1,26 @@
+@use "../variables/colors";
+
+.note {
+  //display: flex;
+  //flex-direction: column;
+  padding: 1rem;
+  border: 1px solid colors.$border;
+  font-family: 'Lato';
+  font-weight: 400;
+  border-radius: 6px;
+  box-shadow: 3px 3px 7px -4px rgba(199, 199, 199, 0.53);
+
+  &:hover {
+    background-color: colors.$highlight;
+  }
+
+  &__body {
+    flex-grow: 1;
+    line-height: 21px;
+  }
+
+  &__meta {
+    font-family: 'Lato';
+    font-weight: 700;
+  }
+}
