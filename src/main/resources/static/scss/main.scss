@@ -2,9 +2,14 @@
 
 @use "variables/fonts";
 
-@use "layout/notes";
+@use "vendors/_reset.css";
 
+@use "layout/notes";
+@use "layout/new-note";
+
+@use "components/button";
 @use "components/note";
+@use "components/note-form";
 
 html, body {
   position: relative;

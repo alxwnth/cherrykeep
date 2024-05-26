@@ -1,0 +1,18 @@
+@use "../variables/colors";
+@use "../variables/base";
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  textarea {
+    box-shadow: inset 3px 3px 7px -4px colors.$shadow;
+    border: 1px solid colors.$border;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: base.$font-family;
+    padding: 1rem;
+  }
+}
