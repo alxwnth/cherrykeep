@@ -1,0 +1,19 @@
+@use '../variables/base';
+@use '../variables/colors';
+
+.button {
+  font-family: base.$font-family;
+  font-weight: base.$font-regular;
+  color: colors.$primary;
+  background-color: colors.$white;
+  border: 1px solid colors.$primary;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background-color: colors.$primary;
+    color: colors.$white;
+  }
+}

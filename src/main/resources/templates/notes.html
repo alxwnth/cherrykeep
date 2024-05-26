@@ -6,15 +6,18 @@
 </head>
 <body>
 <section>
-    <form th:action="@{/notes}" method="post">
-        <label for="noteText" hidden>Note text</label>
-        <textarea th:name="noteText" id="noteText" required minlength="1" maxlength="500"></textarea>
-        <input type="submit" value="Create"/>
-    </form>
+    <div class="l-new-note">
+
+    </div>
     <div class="l-notes">
+        <form th:action="@{/notes}" method="post" class="note-form">
+            <label for="noteText" hidden>Note text</label>
+            <textarea th:name="noteText" id="noteText" required minlength="1" maxlength="500" rows="3"></textarea>
+            <input type="submit" value="Add" class="button"/>
+        </form>
         <div th:each="note : ${userNotes}" class="note">
             <p th:text="${note.content.getText()}" class="note__body"></p>
-            <p th:text="${#temporals.format(note.content.getCreatedAt(), 'MMM dd')}" class="note__meta"></p>
+            <p th:text="${#temporals.format(note.content.getCreatedAt(), 'MMM dd HH:mm:ss')}" class="note__meta"></p>
         </div>
     </div>
 </section>
