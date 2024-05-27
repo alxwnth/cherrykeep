@@ -34,7 +34,7 @@ public class NoteController {
     @GetMapping("/notes")
     public String all(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserId(getCurrentlyAuthenticatedUser().getId()).reversed());
+                noteRepository.findByUserIdAndPinnedFalse(getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }
