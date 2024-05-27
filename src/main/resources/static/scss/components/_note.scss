@@ -22,8 +22,34 @@
     text-align: justify;
   }
 
-  &__meta {
-    font-weight: base.$font-semibold;
-    text-align: right;
+  &-meta {
+    display: flex;
+    justify-content: space-between;
+
+    > .pin {
+      cursor: pointer;
+
+      > svg {
+        width: 20px;
+        height: auto;
+        stroke: colors.$white;
+
+        :hover > & {
+          stroke: colors.$black;
+        }
+      }
+    }
+
+    > .unpin {
+      > svg {
+        width: 20px;
+        height: auto;
+      }
+    }
+
+    > .timestamp {
+      font-weight: base.$font-semibold;
+      text-align: right;
+    }
   }
 }
