@@ -4,6 +4,7 @@
   column-count: 1;
   column-gap: 0.5rem;
   padding: 1rem 1rem;
+  margin-bottom: 50px;
 
   @include mq.mq($from: seed) {
     column-count: 2;
