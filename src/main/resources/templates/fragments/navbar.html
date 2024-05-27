@@ -1,0 +1,24 @@
+<aside class="l-navbar" th:fragment="navbar">
+    <nav>
+        <ul class="nav-menu">
+            <li class="item">
+                <a href="/notes">
+                    <img th:src="@{/images/notes.svg}" alt="Notes icon" class="icon"/>
+                    Notes
+                </a>
+            </li>
+            <li class="item">
+                <a href="/pinned">
+                    <img th:src="@{/images/pin.svg}" alt="Notes icon" class="icon"/>
+                    Pinned
+                </a>
+            </li>
+            <li class="item">
+                <a href="/settings">
+                    <img th:src="@{/images/settings.svg}" alt="Notes icon" class="icon"/>
+                    Settings
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
