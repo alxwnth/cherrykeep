@@ -46,6 +46,14 @@ public class NoteController {
         return "redirect:/notes";
     }
 
+    @GetMapping("/notes/pinned")
+    String pinned(Model model) {
+        CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
+                noteRepository.findByUserIdAndPinnedTrue(getCurrentlyAuthenticatedUser().getId()).reversed());
+        model.addAttribute("userNotes", noteCollection);
+        return "notes";
+    }
+
     @GetMapping("/notes/{id}")
     public EntityModel<Note> one(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
