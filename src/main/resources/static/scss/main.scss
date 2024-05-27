@@ -6,14 +6,19 @@
 
 @use "layout/notes";
 @use "layout/new-note";
+@use "layout/navbar";
 
 @use "components/button";
 @use "components/note";
 @use "components/note-form";
+@use "components/nav-menu";
+
+@use "variables/base";
 
 html, body {
   position: relative;
   height: 100%;
   padding: 0 !important;
   margin: 0 !important;
+  font-family: base.$font-family;
 }

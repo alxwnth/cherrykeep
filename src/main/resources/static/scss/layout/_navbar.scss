@@ -1,0 +1,18 @@
+@use "../vendors/mq";
+
+@use "../variables/colors";
+
+.l-navbar {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  bottom: 0;
+  height: 50px;
+  background-color: colors.$white;
+  border-top: 1px solid colors.$border;
+
+  > nav {
+    height: 100%;
+    width: 100%;
+  }
+}

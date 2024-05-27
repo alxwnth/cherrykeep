@@ -3,14 +3,17 @@
 .l-notes {
   column-count: 1;
   column-gap: 0.5rem;
-  width: 90vw;
-  margin: 0 auto;
+  padding: 1rem 1rem;
 
   @include mq.mq($from: seed) {
     column-count: 2;
   }
 
   @include mq.mq($from: seedling) {
+    column-count: 2;
+  }
+
+  @include mq.mq($from: sprout) {
     column-count: 3;
   }
 
