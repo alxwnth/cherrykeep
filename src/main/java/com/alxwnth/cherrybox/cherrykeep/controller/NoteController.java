@@ -34,7 +34,7 @@ public class NoteController {
     @GetMapping("/notes")
     public String all(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserIdAndPinnedFalse(getCurrentlyAuthenticatedUser().getId()).reversed());
+                noteRepository.findByUserIdAndPinnedFalseOrderByCreatedAt(getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }
@@ -49,7 +49,7 @@ public class NoteController {
     @GetMapping("/notes/pinned")
     String pinned(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserIdAndPinnedTrue(getCurrentlyAuthenticatedUser().getId()).reversed());
+                noteRepository.findByUserIdAndPinnedTrueOrderByCreatedAt(getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }

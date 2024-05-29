@@ -19,7 +19,7 @@ public class NoteModelAssembler implements RepresentationModelAssembler<Note, En
                 linkTo(NoteController.class).slash("users").slash(note.getUser().getId()).slash("notes").withRel("notes"));
 
         if (note.isPinned()) {
-            noteModel.add(linkTo(methodOn(NoteController.class).unpin(note.getId())).withRel("unpin"));
+            noteModel.add(linkTo(methodOn(NoteController.class).unpin(note.getId())).withRel("pin"));
         } else {
             noteModel.add(linkTo(methodOn(NoteController.class).pin(note.getId())).withRel("pin"));
         }
