@@ -18,8 +18,8 @@
     box-shadow: 3px 3px 7px -4px colors.$shadow;
 
     > .meta {
-      > .pin {
-        display: block;
+      > .actions {
+        display: flex;
       }
     }
   }
@@ -40,9 +40,13 @@
       margin-left: auto;
     }
 
-    > .pin {
-      cursor: pointer;
+    > .actions {
       display: none;
+      gap: 0.5rem;
+
+      > div {
+        cursor: pointer;
+      }
     }
   }
 }
