@@ -16,6 +16,12 @@
   &:hover {
     background-color: colors.$highlight;
     box-shadow: 3px 3px 7px -4px colors.$shadow;
+
+    > .meta {
+      > .pin {
+        display: block;
+      }
+    }
   }
 
   > .body {
@@ -26,15 +32,17 @@
   > .meta {
     display: flex;
     justify-content: space-between;
+    height: 24px;
 
     > .timestamp {
       font-weight: base.$font-semibold;
       text-align: right;
+      margin-left: auto;
     }
 
     > .pin {
       cursor: pointer;
-      
+      display: none;
     }
   }
 }

@@ -61,8 +61,9 @@ public class NoteController {
     }
 
     @DeleteMapping("/notes/{id}")
-    public void deleteNote(@PathVariable long id) {
+    public ResponseEntity<Void> deleteNote(@PathVariable long id) {
         noteRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/notes/{id}/pin")
