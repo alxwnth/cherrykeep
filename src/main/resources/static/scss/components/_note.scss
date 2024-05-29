@@ -2,7 +2,7 @@
 @use "../variables/colors";
 @use "../variables/base";
 
-.note {
+.note-card {
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -17,39 +17,22 @@
     box-shadow: 3px 3px 7px -4px colors.$shadow;
   }
 
-  &__body {
-    margin-bottom: 1rem;
+  > .body {
+    padding-bottom: 1rem;
     text-align: justify;
   }
 
-  &-meta {
+  > .meta {
     display: flex;
     justify-content: space-between;
-
-    > .pin {
-      cursor: pointer;
-
-      > svg {
-        width: 20px;
-        height: auto;
-        stroke: colors.$white;
-
-        :hover > & {
-          stroke: colors.$black;
-        }
-      }
-    }
-
-    > .unpin {
-      > svg {
-        width: 20px;
-        height: auto;
-      }
-    }
 
     > .timestamp {
       font-weight: base.$font-semibold;
       text-align: right;
+    }
+
+    > .pin {
+      cursor: pointer;
     }
   }
 }
