@@ -22,7 +22,7 @@
                     </g>
                 </svg>
             </div>
-            <div class="delete" th:hx-delete="${noteEntity.links.getRequiredLink('pin').getHref()}"
+            <div class="delete" th:hx-delete="${noteEntity.links.getRequiredLink('delete').getHref()}"
                  hx-target="closest .note-card" hx-swap="delete">
                 <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
                     <g fill='none' fill-rule='nonzero'>
