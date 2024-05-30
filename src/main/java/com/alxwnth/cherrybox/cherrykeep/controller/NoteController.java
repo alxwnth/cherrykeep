@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class NoteController {
@@ -40,10 +41,13 @@ public class NoteController {
     }
 
     @PostMapping("/notes")
-    String newNote(@RequestParam String noteText) {
-        Note note = new Note(noteText, getCurrentlyAuthenticatedUser());
-        noteRepository.save(note);
-        return "redirect:/notes";
+    ModelAndView newNote(@RequestParam String noteText) {
+        Note note = noteRepository.save(
+                new Note(noteText, getCurrentlyAuthenticatedUser())
+        );
+        ModelAndView mav = new ModelAndView("fragments/note");
+        mav.addObject("noteEntity", assembler.toModel(note));
+        return mav;
     }
 
     @GetMapping("/notes/pinned")
