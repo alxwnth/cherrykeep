@@ -1,0 +1,6 @@
+<form th:hx-post="@{/notes}" hx-target="this" hx-swap="afterend"
+      hx-on::after-request=" if(event.detail.successful) this.reset()" class="note-form">
+    <label for="text" hidden>Note text</label>
+    <textarea th:name="text" id="text" required minlength="1" maxlength="500" rows="3"></textarea>
+    <input type="submit" value="Add" class="button"/>
+</form>

@@ -1,0 +1,7 @@
+<form th:hx-patch="${noteEntity.links.getRequiredLink('edit').getHref()}" hx-target="this" hx-swap="outerHTML"
+      hx-on::after-request=" if(event.detail.successful) this.reset()" th:object="${noteEntity}" class="note-form">
+    <label for="text" hidden>Note text</label>
+    <textarea id="text" name="text" th:text="*{content.text}" required minlength="1" maxlength="500"
+              rows="3"></textarea>
+    <input type="submit" value="Add" class="button"/>
+</form>
