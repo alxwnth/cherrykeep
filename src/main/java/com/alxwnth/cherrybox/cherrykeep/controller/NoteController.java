@@ -4,9 +4,11 @@ import com.alxwnth.cherrybox.cherrykeep.assembler.NoteModelAssembler;
 import com.alxwnth.cherrybox.cherrykeep.entity.Note;
 import com.alxwnth.cherrybox.cherrykeep.entity.User;
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
+import com.alxwnth.cherrybox.cherrykeep.exception.UnauthorizedActionException;
 import com.alxwnth.cherrybox.cherrykeep.exception.UserNotFoundException;
 import com.alxwnth.cherrybox.cherrykeep.repository.NoteRepository;
 import com.alxwnth.cherrybox.cherrykeep.repository.UserRepository;
+import com.alxwnth.cherrybox.cherrykeep.service.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class NoteController {
     private final NoteRepository noteRepository;
     private final NoteModelAssembler assembler;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserRepository userRepository) {
+    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserService userService) {
         this.noteRepository = noteRepository;
         this.assembler = assembler;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     /**
@@ -35,7 +37,7 @@ public class NoteController {
     @GetMapping("/notes")
     public String all(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserIdAndPinnedFalseOrderByCreatedAt(getCurrentlyAuthenticatedUser().getId()).reversed());
+                noteRepository.findByUserIdAndPinnedFalseOrderByCreatedAt(userService.getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }
@@ -43,7 +45,7 @@ public class NoteController {
     @PostMapping("/notes")
     ModelAndView newNote(@RequestParam String noteText) {
         Note note = noteRepository.save(
-                new Note(noteText, getCurrentlyAuthenticatedUser())
+                new Note(noteText, userService.getCurrentlyAuthenticatedUser())
         );
         ModelAndView mav = new ModelAndView("fragments/note");
         mav.addObject("noteEntity", assembler.toModel(note));
@@ -53,7 +55,7 @@ public class NoteController {
     @GetMapping("/notes/pinned")
     String pinned(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserIdAndPinnedTrueOrderByCreatedAt(getCurrentlyAuthenticatedUser().getId()).reversed());
+                noteRepository.findByUserIdAndPinnedTrueOrderByCreatedAt(userService.getCurrentlyAuthenticatedUser().getId()).reversed());
         model.addAttribute("userNotes", noteCollection);
         return "notes";
     }
@@ -61,36 +63,49 @@ public class NoteController {
     @GetMapping("/notes/{id}")
     public EntityModel<Note> one(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+
+        // TODO: Think about doing this with an interceptor or maybe filter
+        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+            throw new UnauthorizedActionException();
+        }
+
         return assembler.toModel(note);
     }
 
     @DeleteMapping("/notes/{id}")
     public ResponseEntity<Void> deleteNote(@PathVariable long id) {
+        Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+
+        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+            throw new UnauthorizedActionException();
+        }
+
         noteRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/notes/{id}/pin")
+    @PatchMapping("/notes/{id}/pin")
     public ResponseEntity<EntityModel<Note>> pin(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+
+        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+            throw new UnauthorizedActionException();
+        }
+
         note.pin();
         return ResponseEntity.ok(assembler.toModel(noteRepository.save(note)));
     }
 
-    @GetMapping("/notes/{id}/unpin")
+    @PatchMapping("/notes/{id}/unpin")
     public ResponseEntity<EntityModel<Note>> unpin(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+
+        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+            throw new UnauthorizedActionException();
+        }
+        
         note.unpin();
         return ResponseEntity.ok(assembler.toModel(noteRepository.save(note)));
-    }
-
-    // TODO: Consider moving it into a different class
-    private User getCurrentlyAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User authenticatedUser = (User) authentication.getPrincipal();
-        Long authenticatedUserId = authenticatedUser.getId();
-        return userRepository.findById(authenticatedUserId)
-                .orElseThrow(() -> new UserNotFoundException(authenticatedUserId));
     }
 }
 

@@ -1,7 +1,10 @@
 package com.alxwnth.cherrybox.cherrykeep.service;
 
 import com.alxwnth.cherrybox.cherrykeep.entity.User;
+import com.alxwnth.cherrybox.cherrykeep.exception.UserNotFoundException;
 import com.alxwnth.cherrybox.cherrykeep.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -45,6 +48,14 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public User getCurrentlyAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) authentication.getPrincipal();
+        Long authenticatedUserId = authenticatedUser.getId();
+        return userRepository.findById(authenticatedUserId)
+                .orElseThrow(() -> new UserNotFoundException(authenticatedUserId));
+    }
+
 /*    public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
@@ -53,5 +64,5 @@ public class UserService implements UserDetailsService {
 
         return false;
     }*/
-    
+
 }

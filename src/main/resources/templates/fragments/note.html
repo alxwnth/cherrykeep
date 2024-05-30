@@ -2,7 +2,7 @@
     <p th:text="${noteEntity.content.getText()}" class="body"></p>
     <div class="meta">
         <div class="actions">
-            <div class="pin" th:hx-get="${noteEntity.links.getRequiredLink('pin').getHref()}"
+            <div class="pin" th:hx-patch="${noteEntity.links.getRequiredLink('pin').getHref()}"
                  hx-target="closest .note-card"
                  hx-swap="delete">
                 <svg xmlns='http://www.w3.org/2000/svg' width='24px' height='24px' viewBox="0 0 24 24"
