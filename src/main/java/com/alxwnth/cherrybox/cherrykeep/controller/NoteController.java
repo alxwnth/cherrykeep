@@ -5,15 +5,11 @@ import com.alxwnth.cherrybox.cherrykeep.entity.Note;
 import com.alxwnth.cherrybox.cherrykeep.entity.User;
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
 import com.alxwnth.cherrybox.cherrykeep.exception.UnauthorizedActionException;
-import com.alxwnth.cherrybox.cherrykeep.exception.UserNotFoundException;
 import com.alxwnth.cherrybox.cherrykeep.repository.NoteRepository;
-import com.alxwnth.cherrybox.cherrykeep.repository.UserRepository;
 import com.alxwnth.cherrybox.cherrykeep.service.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +20,13 @@ public class NoteController {
     private final NoteRepository noteRepository;
     private final NoteModelAssembler assembler;
     private final UserService userService;
+    private final NoteModelAssembler noteModelAssembler;
 
-    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserService userService) {
+    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserService userService, NoteModelAssembler noteModelAssembler) {
         this.noteRepository = noteRepository;
         this.assembler = assembler;
         this.userService = userService;
+        this.noteModelAssembler = noteModelAssembler;
     }
 
     /**
@@ -43,9 +41,9 @@ public class NoteController {
     }
 
     @PostMapping("/notes")
-    ModelAndView newNote(@RequestParam String noteText) {
+    ModelAndView newNote(@RequestParam String text) {
         Note note = noteRepository.save(
-                new Note(noteText, userService.getCurrentlyAuthenticatedUser())
+                new Note(text, userService.getCurrentlyAuthenticatedUser())
         );
         ModelAndView mav = new ModelAndView("fragments/note");
         mav.addObject("noteEntity", assembler.toModel(note));
@@ -70,6 +68,30 @@ public class NoteController {
         }
 
         return assembler.toModel(note);
+    }
+
+    @GetMapping("/notes/{id}/edit")
+    String editNoteView(@PathVariable long id, Model model) {
+        Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+        model.addAttribute("noteEntity", noteModelAssembler.toModel(note));
+
+        return "fragments/edit-note";
+    }
+
+    @PatchMapping("/notes/{id}/edit")
+    ModelAndView edit(@PathVariable long id, @RequestParam String text) {
+        Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+
+        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+            throw new UnauthorizedActionException();
+        }
+
+        note.setText(text);
+        noteRepository.save(note);
+
+        ModelAndView mav = new ModelAndView("fragments/note");
+        mav.addObject("noteEntity", assembler.toModel(note));
+        return mav;
     }
 
     @DeleteMapping("/notes/{id}")
@@ -103,7 +125,7 @@ public class NoteController {
         if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
-        
+
         note.unpin();
         return ResponseEntity.ok(assembler.toModel(noteRepository.save(note)));
     }

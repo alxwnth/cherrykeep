@@ -17,6 +17,7 @@ public class NoteModelAssembler implements RepresentationModelAssembler<Note, En
                 // TODO: Maybe it's not the best way to do this, look deeper later
                 linkTo(NoteController.class).slash("notes").slash(note.getId()).withSelfRel(),
                 linkTo(methodOn(NoteController.class).deleteNote(note.getId())).withRel("delete"),
+                linkTo(NoteController.class).slash("notes").slash(note.getId()).slash("edit").withRel("edit"),
                 linkTo(NoteController.class).slash("users").slash(note.getUser().getId()).slash("notes").withRel("notes"));
 
         if (note.isPinned()) {
