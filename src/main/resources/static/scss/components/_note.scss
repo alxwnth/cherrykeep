@@ -19,7 +19,8 @@
 
     > .meta {
       > .actions {
-        display: flex;
+        visibility: visible;
+        opacity: 1;
       }
     }
   }
@@ -36,13 +37,14 @@
 
     > .timestamp {
       font-weight: base.$font-semibold;
-      text-align: right;
-      margin-left: auto;
     }
 
     > .actions {
-      display: none;
+      display: flex;
       gap: 0.5rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s linear;
 
       > div {
         cursor: pointer;
