@@ -4,8 +4,8 @@
     <title>My notes</title>
 </head>
 <body>
-<aside th:replace="~{fragments/navbar}"></aside>
 <section>
+    <aside th:replace="~{fragments/navbar}"></aside>
     <div class="l-notes">
         <form th:replace="~{fragments/new-note}"></form>
         <article th:each="noteEntity : ${userNotes}"
