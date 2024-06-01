@@ -1,10 +1,10 @@
-<!DOCTYPE html>
 <html th:replace="~{layouts/root :: layout(~{::title}, ~{::section})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My notes</title>
 </head>
 <body>
+<aside th:replace="~{fragments/navbar}"></aside>
 <section>
     <div class="l-notes">
         <form th:replace="~{fragments/new-note}"></form>

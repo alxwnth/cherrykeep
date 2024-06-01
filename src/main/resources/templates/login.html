@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html th:replace="~{layouts/root :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Welcome to cherry[keep]</title>
 </head>
 <body>
 <div th:if="${param.error}">
@@ -11,10 +10,12 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
-</body>
-</html>
+<section>
+    <form th:action="@{/login}" method="post" class="credentials-form">
+        <div class="field"><label for="username">Username</label><input type="text" name="username" id="username"/>
+        </div>
+        <div class="field"><label for="password">Password</label><input type="password" name="password" id="password"/>
+        </div>
+        <div><input type="submit" value="Sign in" class="button"/></div>
+    </form>
+</section>
