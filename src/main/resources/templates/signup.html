@@ -2,18 +2,24 @@
 <html th:replace="~{layouts/root :: layout(~{::title}, ~{::section})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Title</title>
+    <title>Welcome to cherry[keep]</title>
 </head>
 <section>
-    <form th:action="@{/signup}" th:object="${userForm}" method="POST">
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" th:field="*{username}"/>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" th:field="*{password}"/>
+    <form th:action="@{/signup}" th:object="${userForm}" method="post" class="credentials-form">
+        <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" th:field="*{username}"/>
+        </div>
+        <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" th:field="*{password}"/>
+        </div>
         <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password error</p>
-        <label for="confirmPassword">Confirm password</label>
-        <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}"/>
-        <input type="submit" value="Submit"/>
+        <div class="field">
+            <label for="confirmPassword">Confirm password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}"/>
+        </div>
+        <input type="submit" value="Sign up" class="button"/>
     </form>
 </section>
 </html>
