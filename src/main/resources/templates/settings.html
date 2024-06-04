@@ -1,0 +1,15 @@
+<html th:replace="~{layouts/root :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Settings</title>
+</head>
+<body>
+<section>
+    <aside th:replace="~{fragments/navbar}"></aside>
+    <form th:action="@{/logout}" method="POST" hx-boost="false">
+        <input type="submit" value="Log out" class="button">
+    </form>
+
+</section>
+</body>
+</html>
