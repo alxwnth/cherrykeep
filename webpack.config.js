@@ -36,7 +36,8 @@ module.exports = (env, argv) => ({
             {
                 test: /\.scss$/,
                 use: [
-                    argv.mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
+                    // argv.mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
