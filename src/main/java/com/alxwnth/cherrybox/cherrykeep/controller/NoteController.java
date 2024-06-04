@@ -6,6 +6,7 @@ import com.alxwnth.cherrybox.cherrykeep.entity.User;
 import com.alxwnth.cherrybox.cherrykeep.exception.NoteNotFoundException;
 import com.alxwnth.cherrybox.cherrykeep.exception.UnauthorizedActionException;
 import com.alxwnth.cherrybox.cherrykeep.repository.NoteRepository;
+import com.alxwnth.cherrybox.cherrykeep.service.UserSecurityService;
 import com.alxwnth.cherrybox.cherrykeep.service.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -23,12 +24,14 @@ public class NoteController {
     private final NoteRepository noteRepository;
     private final NoteModelAssembler assembler;
     private final UserService userService;
+    private final UserSecurityService userSecurityService;
     private final NoteModelAssembler noteModelAssembler;
 
-    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserService userService, NoteModelAssembler noteModelAssembler) {
+    NoteController(NoteRepository noteRepository, NoteModelAssembler assembler, UserService userService, UserSecurityService userSecurityService, NoteModelAssembler noteModelAssembler) {
         this.noteRepository = noteRepository;
         this.assembler = assembler;
         this.userService = userService;
+        this.userSecurityService = userSecurityService;
         this.noteModelAssembler = noteModelAssembler;
     }
 
@@ -39,7 +42,7 @@ public class NoteController {
     public String all(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
                 noteRepository.findByUserIdAndPinnedFalseAndExpiresAtAfterOrderByCreatedAt(
-                        userService.getCurrentlyAuthenticatedUser().getId(), ZonedDateTime.now(ZoneId.of("UTC+0"))).reversed()
+                        userSecurityService.getCurrentlyAuthenticatedUser().getId(), ZonedDateTime.now(ZoneId.of("UTC+0"))).reversed()
         );
         model.addAttribute("userNotes", noteCollection);
         return "notes";
@@ -48,7 +51,7 @@ public class NoteController {
     @PostMapping("/notes")
     ModelAndView newNote(@RequestParam String text) {
         Note note = noteRepository.save(
-                new Note(text, userService.getCurrentlyAuthenticatedUser())
+                new Note(text, userSecurityService.getCurrentlyAuthenticatedUser())
         );
         ModelAndView mav = new ModelAndView("fragments/note");
         mav.addObject("noteEntity", assembler.toModel(note));
@@ -58,7 +61,7 @@ public class NoteController {
     @GetMapping("/notes/pinned")
     String pinned(Model model) {
         CollectionModel<EntityModel<Note>> noteCollection = assembler.toCollectionModel(
-                noteRepository.findByUserIdAndPinnedTrueOrderByCreatedAt(userService.getCurrentlyAuthenticatedUser().getId()).reversed()
+                noteRepository.findByUserIdAndPinnedTrueOrderByCreatedAt(userSecurityService.getCurrentlyAuthenticatedUser().getId()).reversed()
         );
         model.addAttribute("userNotes", noteCollection);
         return "notes";
@@ -69,7 +72,7 @@ public class NoteController {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
 
         // TODO: Think about doing this with an interceptor or maybe filter
-        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+        if (!userSecurityService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
 
@@ -88,7 +91,7 @@ public class NoteController {
     ModelAndView edit(@PathVariable long id, @RequestParam String text) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
 
-        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+        if (!userSecurityService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
 
@@ -104,7 +107,7 @@ public class NoteController {
     public ResponseEntity<Void> deleteNote(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
 
-        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+        if (!userSecurityService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
 
@@ -116,7 +119,7 @@ public class NoteController {
     public ResponseEntity<EntityModel<Note>> pin(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
 
-        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+        if (!userSecurityService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
 
@@ -128,7 +131,7 @@ public class NoteController {
     public ResponseEntity<EntityModel<Note>> unpin(@PathVariable long id) {
         Note note = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
 
-        if (!userService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
+        if (!userSecurityService.getCurrentlyAuthenticatedUser().getId().equals(note.getUser().getId())) {
             throw new UnauthorizedActionException();
         }
 
