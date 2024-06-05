@@ -19,9 +19,7 @@ public class LoggedInFilter extends GenericFilterBean {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 
-        System.out.println("LoggedInFilter");
-
-        // TODO: Refactor this
+        // TODO: (1) Refactor this and (2) look for a way to have this filter only for given routes
         if (isAuthenticated() && ("/login".equals(servletRequest.getRequestURI()) || "/signup".equals(servletRequest.getRequestURI()))) {
             String encodedRedirectURL = ((HttpServletResponse) response).encodeRedirectURL(
                     servletRequest.getContextPath() + "/notes"

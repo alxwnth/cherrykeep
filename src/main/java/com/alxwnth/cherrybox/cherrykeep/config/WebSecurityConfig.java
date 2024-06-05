@@ -38,6 +38,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+
     @Autowired
     protected void configureGlobals(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(argon2PasswordEncoder);

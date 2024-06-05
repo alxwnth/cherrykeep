@@ -1,7 +1,10 @@
 package com.alxwnth.cherrybox.cherrykeep.controller;
 
 import com.alxwnth.cherrybox.cherrykeep.entity.User;
+import com.alxwnth.cherrybox.cherrykeep.service.UserSecurityService;
 import com.alxwnth.cherrybox.cherrykeep.service.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class RegistrationController {
 
     private final UserService userService;
+    private final UserSecurityService userSecurityService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserService userService, UserSecurityService userSecurityService) {
         this.userService = userService;
+        this.userSecurityService = userSecurityService;
     }
 
     @GetMapping("/signup")
@@ -26,7 +31,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
+    public String signup(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
             return "signup";
@@ -35,11 +40,19 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords don't match");
             return "signup";
         }
-        if (!userService.saveUser(userForm)) {
+        String passwordForAutologin = userForm.getPassword();
+        if (userService.saveUser(userForm)) {
+            try {
+                userSecurityService.autoLogin(request, userForm.getUsername(), passwordForAutologin);
+            } catch (ServletException e) {
+                model.addAttribute("loginError", "Signed up but couldn't log in. Try logging in manually!");
+                return "signup";
+            }
+            return "redirect:/login";
+        } else {
             model.addAttribute("usernameError", "Username taken");
+            return "signup";
         }
-
-        return "redirect:/";
     }
 
 }
