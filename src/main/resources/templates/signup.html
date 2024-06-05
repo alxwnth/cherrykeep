@@ -6,6 +6,7 @@
 </head>
 <section>
     <form th:action="@{/signup}" th:object="${userForm}" method="post" class="credentials-form">
+        <p th:if="${loginError != null}" th:text="${loginError}">Login error</p>
         <div class="field">
             <label for="username">Username</label>
             <input id="username" name="username" type="text" th:field="*{username}"/>
