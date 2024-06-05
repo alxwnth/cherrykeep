@@ -11,12 +11,17 @@
     You have been logged out.
 </div>
 <section>
-    <form th:action="@{/login}" method="post" class="credentials-form">
-        <div class="field"><label for="username">Username</label><input type="text" name="username" id="username"/>
+    <div class="container">
+        <form th:action="@{/login}" method="post" class="credentials-form">
+            <div class="field"><label for="username">Username</label><input type="text" name="username" id="username"/>
+            </div>
+            <div class="field"><label for="password">Password</label><input type="password" name="password"
+                                                                            id="password"/>
+            </div>
+            <div><input type="submit" value="Sign in" class="button"/></div>
+        </form>
+        <div class="form-links">
+            <a th:href="@{/signup}">Need an account?</a>
         </div>
-        <div class="field"><label for="password">Password</label><input type="password" name="password" id="password"/>
-        </div>
-        <div><input type="submit" value="Sign in" class="button"/></div>
-    </form>
-    <a th:href="@{/signup}">Don't have an account?</a>
+    </div>
 </section>

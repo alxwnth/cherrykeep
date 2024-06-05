@@ -5,22 +5,27 @@
     <title>Welcome to cherry[keep]</title>
 </head>
 <section>
-    <form th:action="@{/signup}" th:object="${userForm}" method="post" class="credentials-form">
-        <p th:if="${loginError != null}" th:text="${loginError}">Login error</p>
-        <div class="field">
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" th:field="*{username}"/>
+    <div class="container">
+        <form th:action="@{/signup}" th:object="${userForm}" method="post" class="credentials-form">
+            <p th:if="${loginError != null}" th:text="${loginError}">Login error</p>
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" th:field="*{username}"/>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" th:field="*{password}"/>
+            </div>
+            <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password error</p>
+            <div class="field">
+                <label for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}"/>
+            </div>
+            <input type="submit" value="Sign up" class="button"/>
+        </form>
+        <div class="form-links">
+            <a th:href="@{/login}">Have an account already?</a>
         </div>
-        <div class="field">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" th:field="*{password}"/>
-        </div>
-        <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password error</p>
-        <div class="field">
-            <label for="confirmPassword">Confirm password</label>
-            <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}"/>
-        </div>
-        <input type="submit" value="Sign up" class="button"/>
-    </form>
+    </div>
 </section>
 </html>
