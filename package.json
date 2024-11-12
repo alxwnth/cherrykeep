@@ -2,7 +2,7 @@
   "name": "cherrykeep",
   "description": "Keep your thoughts. Or forget them.",
   "main": "index.js",
-  "author": "alxwnth",
+  "author": "nxvembrx",
   "scripts": {
     "build": "webpack --mode production",
     "devserver": "webpack serve --mode development"
